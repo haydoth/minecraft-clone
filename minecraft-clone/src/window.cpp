@@ -1,8 +1,9 @@
 #include "window.h"
 
 #include <cassert>
+#include "event/events.h"
 
-window::window(window_data data)
+window::window(window_data data) : m_data(data)
 {
 	int success = glfwInit();
 	assert(success && "Failed to initialize GLFW!");
@@ -18,6 +19,30 @@ window::window(window_data data)
 
 	success = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 	assert(success && "Failed to initialize Glad!");
+
+	glfwSetWindowUserPointer(m_window, &m_data);
+
+	// set callbacks
+	glfwSetFramebufferSizeCallback(m_window, [](GLFWwindow* window, int width, int height)
+		{
+			glViewport(0, 0, width, height);
+		});
+
+	glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window)
+		{
+			window_data& data = *(window_data*) glfwGetWindowUserPointer(window);
+
+			window_close_event event;
+			data.event_callback(event);
+		});
+
+	glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double xpos, double ypos)
+		{
+			window_data& data = *(window_data*)glfwGetWindowUserPointer(window);
+
+			mouse_moved_event event((float) xpos, (float) ypos);
+			data.event_callback(event);
+		});
 }
 
 window::~window()

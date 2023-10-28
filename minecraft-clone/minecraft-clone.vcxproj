@@ -44,7 +44,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\storage\cpplibs\glfw;C:\storage\cpplibs\glad;C:\storage\cpplibs\glm;$(IncludePath)</IncludePath>
+    <IncludePath>C:\storage\vs\minecraft-clone\minecraft-clone\src;C:\storage\cpplibs\glfw;C:\storage\cpplibs\glad;C:\storage\cpplibs\glm;$(IncludePath)</IncludePath>
     <IntDir>$(SolutionDir)/bin-int/$(Platform)-$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)/bin/$(Platform)-$(Configuration)\</OutDir>
     <LibraryPath>C:\storage\cpplibs\glfw;$(LibraryPath)</LibraryPath>
@@ -81,16 +81,28 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\cpplibs\glad\glad.c" />
+    <ClCompile Include="src\block_manager.cpp" />
     <ClCompile Include="src\application.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\block.h" />
+    <ClInclude Include="src\block_manager.h" />
     <ClInclude Include="src\application.h" />
     <ClInclude Include="src\buffer.h" />
+    <ClInclude Include="src\camera.h" />
+    <ClInclude Include="src\constants.h" />
     <ClInclude Include="src\core.h" />
+    <ClInclude Include="src\event\event.h" />
+    <ClInclude Include="src\event\events.h" />
+    <ClInclude Include="src\shader.h" />
     <ClInclude Include="src\vertex.h" />
     <ClInclude Include="src\window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\shaders\basic.mcshader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
