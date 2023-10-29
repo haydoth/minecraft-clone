@@ -23,7 +23,7 @@ window::window(window_data data) : m_data(data)
 	glfwSetWindowUserPointer(m_window, &m_data);
 
 	// set callbacks
-	glfwSetFramebufferSizeCallback(m_window, [](GLFWwindow* window, int width, int height)
+	glfwSetWindowSizeCallback(m_window, [](GLFWwindow* window, int width, int height)
 		{
 			glViewport(0, 0, width, height);
 		});
@@ -33,6 +33,71 @@ window::window(window_data data) : m_data(data)
 			window_data& data = *(window_data*) glfwGetWindowUserPointer(window);
 
 			window_close_event event;
+			data.event_callback(event);
+		});
+
+	glfwSetKeyCallback(m_window,
+		[](GLFWwindow* window, int key, int scancode, int action, int mods)
+		{
+			window_data& data = *(window_data*)glfwGetWindowUserPointer(window);
+
+			switch (action)
+			{
+			case GLFW_PRESS:
+			{
+				key_pressed_event event(key, 0);
+				data.event_callback(event);
+				break;
+			}
+			case GLFW_RELEASE:
+			{
+				key_released_event event(key);
+				data.event_callback(event);
+				break;
+			}
+			case GLFW_REPEAT:
+			{
+				key_pressed_event event(key, 1);
+				data.event_callback(event);
+				break;
+			}
+			}
+		});
+
+	glfwSetCharCallback(m_window, [](GLFWwindow* window, unsigned int keycode)
+		{
+			window_data& data = *(window_data*)glfwGetWindowUserPointer(window);
+			key_typed_event event(keycode);
+			data.event_callback(event);
+		});
+
+	glfwSetMouseButtonCallback(m_window,
+		[](GLFWwindow* window, int button, int action, int modes)
+		{
+			window_data& data = *(window_data*)glfwGetWindowUserPointer(window);
+
+			switch (action)
+			{
+			case GLFW_PRESS:
+			{
+				mouse_button_pressed_event event(button);
+				data.event_callback(event);
+				break;
+			}
+			case GLFW_RELEASE:
+			{
+				mouse_button_released_event event(button);
+				data.event_callback(event);
+				break;
+			}
+			}
+		});
+
+	glfwSetScrollCallback(m_window, [](GLFWwindow* window, double xOffset, double yOffset)
+		{
+			window_data& data = *(window_data*)glfwGetWindowUserPointer(window);
+
+			mouse_scrolled_event event((float)xOffset, (float)yOffset);
 			data.event_callback(event);
 		});
 

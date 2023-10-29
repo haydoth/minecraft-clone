@@ -17,7 +17,7 @@ public:
 	bool handled = false;
 
 	virtual event_type get_type() const = 0;
-	virtual std::string get_debug_name() const = 0;
+	virtual std::string to_string() const = 0;
 };
 
 #define EVENT_TYPE(x) event_type get_type() const override { return x; }\

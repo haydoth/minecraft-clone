@@ -2,6 +2,7 @@
 
 #include <ext.hpp>
 #include <iostream>
+#include <core.h>
 
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
@@ -20,11 +21,21 @@ public:
         glm::vec3 position;
     };
 
+    struct perspective_data {
+        float fov_y;
+        float aspect_ratio;
+        float near;
+        float far;
+
+        perspective_data(float _fov_y, float _aspect_ratio, float _near, float _far)
+            : fov_y(_fov_y), aspect_ratio(_aspect_ratio), near(_near), far(_far) {}
+    };
+
 
     // constructor with vectors
     camera(
-        glm::mat4 projection = 
-        glm::lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, -1), glm::vec3(0, 1, 0)),
+        perspective_data projection_data = 
+        perspective_data(75.0f, 16.0f / 9.0f, 0.1f, 3000.0f),
         glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f),
         float yaw = YAW, float pitch = PITCH) : m_front(glm::vec3(0.0f, 0.0f, -1.0f))
@@ -37,7 +48,9 @@ public:
 
         m_data = camera_data();
         m_data.view_matrix = glm::mat4(1);
-        m_data.projection_matrix = projection;
+        m_data.projection_matrix = glm::perspective
+            (glm::radians(projection_data.fov_y), projection_data.aspect_ratio, 
+                projection_data.near, projection_data.far);
     }
 
     camera_data get_data()
@@ -71,11 +84,6 @@ public:
 
         // update Front, Right and Up Vectors using the updated Euler angles
         update_camera_vectors();
-    }
-
-    bool on_mouse_moved_event()
-    {
-
     }
 
 private:

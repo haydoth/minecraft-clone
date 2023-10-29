@@ -1,12 +1,21 @@
 #include "application.h"
 
+#include <iostream>
+
 #include "shader.h"
 #include "core.h"
-#include <iostream>
-#include <camera.h>
+#include "camera.h"
+#include "input.h"
+#include "renderer.h"
+#include "buffer.h"
 
-application::application()
+application* application::s_instance = nullptr;
+
+application::application() : m_player(20.0f, 0.25f)
 {
+    assert(!s_instance && "Application already exists!");
+    s_instance = this;
+
 	m_window = std::make_unique<window>(window::window_data("mc clone", 1280, 720));
     m_window->set_event_callback(BIND_FN(application::on_event));
 }
@@ -17,10 +26,17 @@ application::~application()
 
 void application::on_event(event& e)
 {
-    LOG(e.get_debug_name());
+    //LOG(e.to_string());
 
     event_dispatcher dispatcher(e);
+
     dispatcher.dispatch<window_close_event>(BIND_FN(application::on_window_close));
+
+    // TODO: implement a better way to sort through objects that are affected by events.
+    // for example; if the player is in a menu, then we don't want the mouse move event
+    // to be handled by the player rotation script, we want it to move the ingame cursor.
+
+    m_player.on_event(e);
 }
 
 bool application::on_window_close(window_close_event& e)
@@ -44,39 +60,39 @@ void application::run()
         0, 1, 3,  // first Triangle
         1, 2, 3   // second Triangle
     };
-    unsigned int VBO, VAO, EBO; 
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-    // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-    glBindVertexArray(VAO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    vertex_array vao;
+    vao.bind();
+    vertex_buffer vbo(vertices, sizeof(vertices));
+    index_buffer ibo(indices, sizeof(indices));
+    vertex_attribute_array(0, 3, 0, 0);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    input::set_cursor_mode(GLFW_CURSOR_DISABLED);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    camera camera;
+    glEnable(GL_DEPTH_TEST);
 
 	while (m_running)
 	{
+        // update timestep
+        float time = (float) glfwGetTime();
+        timestep timestep = time - m_last_frame_time;
+        m_last_frame_time = time;
+
+        // update player
+        m_player.update_position(timestep);
+        // player rotation is handled by an event
+
+        if (input::is_key_pressed(GLFW_KEY_L)) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+        // rendering
 		glClearColor(0.3f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glUseProgram(basic_shader.get_handle());
+        renderer::draw_mesh({ {basic_shader, 6, vao, ibo},
+            glm::mat4(1), m_player.get_camera() });
 
-        basic_shader.set_mat4("model", glm::mat4(1));
-        basic_shader.set_mat4("view", camera.get_data().view_matrix);
-        basic_shader.set_mat4("projection", camera.get_data().projection_matrix);
-
-        glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-        //glDrawArrays(GL_TRIANGLES, 0, 6);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
+        // window update
 		m_window->update();
 	}
 }

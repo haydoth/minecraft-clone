@@ -4,5 +4,5 @@
 struct block 
 {
 	unsigned int faces : 6;
-	uint8_t type;
+	unsigned int type : 8;
 };
