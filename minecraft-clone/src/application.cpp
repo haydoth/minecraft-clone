@@ -8,6 +8,8 @@
 #include "input.h"
 #include "renderer.h"
 #include "buffer.h"
+#include "world/block.h"
+#include "world/chunk_manager.h"
 
 application* application::s_instance = nullptr;
 
@@ -18,10 +20,17 @@ application::application() : m_player(20.0f, 0.25f)
 
 	m_window = std::make_unique<window>(window::window_data("mc clone", 1280, 720));
     m_window->set_event_callback(BIND_FN(application::on_event));
+
+    std::string atlas_path = "src/textures/atlas.png";
+
+    m_texture_atlas = std::make_unique<texture_atlas>(16);
+    bool loaded_atlas = m_texture_atlas.get()->load_from_file(atlas_path);
+    assert(loaded_atlas
+        && "Failed to load texture atlas.");
 }
 
 application::~application()
-{
+{   
 }
 
 void application::on_event(event& e)
@@ -50,26 +59,16 @@ void application::run()
     std::string basic_shader_src = "src/shaders/basic.mcshader";
     shader basic_shader(shader::parse_shader_source(basic_shader_src));
 
-    float vertices[] = {
-         0.5f,  0.5f, 0.0f,  // top right
-         0.5f, -0.5f, 0.0f,  // bottom right
-        -0.5f, -0.5f, 0.0f,  // bottom left
-        -0.5f,  0.5f, 0.0f   // top left 
-    };
-    unsigned int indices[] = {  // note that we start from 0!
-        0, 1, 3,  // first Triangle
-        1, 2, 3   // second Triangle
-    };
+    basic_shader.set_int("Atlas", 0);
 
-    vertex_array vao;
-    vao.bind();
-    vertex_buffer vbo(vertices, sizeof(vertices));
-    index_buffer ibo(indices, sizeof(indices));
-    vertex_attribute_array(0, 3, 0, 0);
+    chunk_manager manager;
+    manager.update({ 0,0,0 });
 
+    // settings
     input::set_cursor_mode(GLFW_CURSOR_DISABLED);
-
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
 
 	while (m_running)
 	{
@@ -82,15 +81,20 @@ void application::run()
         m_player.update_position(timestep);
         // player rotation is handled by an event
 
+        // wireframe mode
         if (input::is_key_pressed(GLFW_KEY_L)) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
+       
         // rendering
 		glClearColor(0.3f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        renderer::draw_mesh({ {basic_shader, 6, vao, ibo},
-            glm::mat4(1), m_player.get_camera() });
+        for (auto& pair : manager.get_chunks())
+        {
+            chunk_data data = pair.second.get()->get_data();
+            renderer::draw_mesh({ {basic_shader, data.index_count, data.vao, data.ibo},
+                data.transform, m_player.get_camera() });
+        }
 
         // window update
 		m_window->update();
