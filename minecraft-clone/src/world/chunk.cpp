@@ -2,11 +2,7 @@
 #include <vertex.h>
 
 #include <application.h>
-
-int get_index(int x, int y, int z)
-{
-	return (z * CHUNK_SIZE * CHUNK_HEIGHT) + (y * CHUNK_SIZE) + x;
-}
+#include <util.h>
 
 std::vector<vertex> generate_block_vertices
 (block_type type, std::bitset<6> faces, glm::vec3 pos)
@@ -20,49 +16,80 @@ std::vector<vertex> generate_block_vertices
 
 	std::vector<vertex> vertices;
 
-	// note: this works because currently, all faces have the same texture
-	glm::ivec2 coords;
-	coords = type_to_atlas_coordinates(type);
-	std::vector<float> uvs =
-		application::get().get_texture_atlas().get_uvs_from_coords(coords.x, coords.y);
 
-	if (faces[0])
+
+
+	// optimization:
+	// instead of generating vertices on the fly, this could probably
+	// be precomputed easily
+
+	if (faces[TOP_FACE_INDEX])
 	{
+		glm::ivec2 coords;
+		coords = get_atlas_coordinates(type, TOP_FACE_INDEX);
+		std::vector<float> uvs =
+			application::get().get_texture_atlas().get_uvs_from_coords(coords.x, coords.y);
+
 		vertices.push_back({ pos + TOP_FACE[0], {uvs[0], uvs[1]}, TOP_FACE_LIGHT_VALUE });
 		vertices.push_back({ pos + TOP_FACE[1], {uvs[2], uvs[3]}, TOP_FACE_LIGHT_VALUE });
 		vertices.push_back({ pos + TOP_FACE[2], {uvs[4], uvs[5]}, TOP_FACE_LIGHT_VALUE });
 		vertices.push_back({ pos + TOP_FACE[3], {uvs[6], uvs[7]}, TOP_FACE_LIGHT_VALUE });
 	}
-	if (faces[1])
+	if (faces[BOTTOM_FACE_INDEX])
 	{
+		glm::ivec2 coords;
+		coords = get_atlas_coordinates(type, BOTTOM_FACE_INDEX);
+		std::vector<float> uvs =
+			application::get().get_texture_atlas().get_uvs_from_coords(coords.x, coords.y);
+
 		vertices.push_back({ pos + BOTTOM_FACE[0], {uvs[0], uvs[1]}, BOTTOM_FACE_LIGHT_VALUE });
 		vertices.push_back({ pos + BOTTOM_FACE[1], {uvs[2], uvs[3]}, BOTTOM_FACE_LIGHT_VALUE });
 		vertices.push_back({ pos + BOTTOM_FACE[2], {uvs[4], uvs[5]}, BOTTOM_FACE_LIGHT_VALUE });
 		vertices.push_back({ pos + BOTTOM_FACE[3], {uvs[6], uvs[7]}, BOTTOM_FACE_LIGHT_VALUE });
 	}
-	if (faces[2])
+	if (faces[FRONT_FACE_INDEX])
 	{
+		glm::ivec2 coords;
+		coords = get_atlas_coordinates(type, FRONT_FACE_INDEX);
+		std::vector<float> uvs =
+			application::get().get_texture_atlas().get_uvs_from_coords(coords.x, coords.y);
+
 		vertices.push_back({ pos + FRONT_FACE[0], {uvs[0], uvs[1]}, Z_FACE_LIGHT_VALUE });
 		vertices.push_back({ pos + FRONT_FACE[1], {uvs[2], uvs[3]}, Z_FACE_LIGHT_VALUE });
 		vertices.push_back({ pos + FRONT_FACE[2], {uvs[4], uvs[5]}, Z_FACE_LIGHT_VALUE });
 		vertices.push_back({ pos + FRONT_FACE[3], {uvs[6], uvs[7]}, Z_FACE_LIGHT_VALUE });
 	}
-	if (faces[3])
+	if (faces[BACK_FACE_INDEX])
 	{
+		glm::ivec2 coords;
+		coords = get_atlas_coordinates(type, BACK_FACE_INDEX);
+		std::vector<float> uvs =
+			application::get().get_texture_atlas().get_uvs_from_coords(coords.x, coords.y);
+
 		vertices.push_back({ pos + BACK_FACE[0], {uvs[0], uvs[1]}, Z_FACE_LIGHT_VALUE });
 		vertices.push_back({ pos + BACK_FACE[1], {uvs[2], uvs[3]}, Z_FACE_LIGHT_VALUE });
 		vertices.push_back({ pos + BACK_FACE[2], {uvs[4], uvs[5]}, Z_FACE_LIGHT_VALUE });
 		vertices.push_back({ pos + BACK_FACE[3], {uvs[6], uvs[7]}, Z_FACE_LIGHT_VALUE });
 	}
-	if (faces[4])
+	if (faces[RIGHT_FACE_INDEX])
 	{
+		glm::ivec2 coords;
+		coords = get_atlas_coordinates(type, RIGHT_FACE_INDEX);
+		std::vector<float> uvs =
+			application::get().get_texture_atlas().get_uvs_from_coords(coords.x, coords.y);
+
 		vertices.push_back({ pos + RIGHT_FACE[0], {uvs[0], uvs[1]}, X_FACE_LIGHT_VALUE });
 		vertices.push_back({ pos + RIGHT_FACE[1], {uvs[2], uvs[3]}, X_FACE_LIGHT_VALUE });
 		vertices.push_back({ pos + RIGHT_FACE[2], {uvs[4], uvs[5]}, X_FACE_LIGHT_VALUE });
 		vertices.push_back({ pos + RIGHT_FACE[3], {uvs[6], uvs[7]}, X_FACE_LIGHT_VALUE });
 	}
-	if (faces[5])
+	if (faces[LEFT_FACE_INDEX])
 	{
+		glm::ivec2 coords;
+		coords = get_atlas_coordinates(type, LEFT_FACE_INDEX);
+		std::vector<float> uvs =
+			application::get().get_texture_atlas().get_uvs_from_coords(coords.x, coords.y);
+
 		vertices.push_back({ pos + LEFT_FACE[0], {uvs[0], uvs[1]}, X_FACE_LIGHT_VALUE });
 		vertices.push_back({ pos + LEFT_FACE[1], {uvs[2], uvs[3]}, X_FACE_LIGHT_VALUE });
 		vertices.push_back({ pos + LEFT_FACE[2], {uvs[4], uvs[5]}, X_FACE_LIGHT_VALUE });
@@ -72,22 +99,22 @@ std::vector<vertex> generate_block_vertices
 	return vertices;
 }
 
-void chunk::load_blocks()
+void chunk::load_blocks(chunk_generator gen)
 {
-	for(int x = 0; x < CHUNK_SIZE; x++)
+
+	for(int x = 0; x < CHUNK_SIZE + 2; x++)
 	{
 		for (int y = 0; y < CHUNK_HEIGHT; y++)
 		{
-			for (int z = 0; z < CHUNK_SIZE; z++)
+			for (int z = 0; z < CHUNK_SIZE + 2; z++)
 			{
-				if(y <= 2)
-				{
-					m_block_types[get_index(x, y, z)] = block_type::STONE;
-				}
-				else
-				{
-					m_block_types[get_index(x, y, z)] = block_type::AIR;
-				}
+				glm::ivec3 world_pos = glm::ivec3(
+					x + (m_position.x * CHUNK_SIZE),
+					y,
+					z + (m_position.z * CHUNK_SIZE));
+
+				m_block_types[util::get_chunk_index(x, y, z)] = 
+					gen.generate(world_pos);
 			}
 		}
 	}
@@ -101,19 +128,18 @@ void chunk::load_mesh()
 
 	int num_faces = 0;
 
-	for (int x = 0; x < CHUNK_SIZE; x++)
+	for (int x = 1; x < CHUNK_SIZE + 1; x++)
 	{
 		for (int y = 0; y < CHUNK_HEIGHT; y++)
 		{
-			for (int z = 0; z < CHUNK_SIZE; z++)
+			for (int z = 1; z < CHUNK_SIZE + 1; z++)
 			{
-				int block_index = get_index(x, y, z);
+				int block_index = util::get_chunk_index(x, y, z);
 				block_type& type = m_block_types[block_index];
-				std::bitset<6>& faces = m_block_faces[block_index];
+				std::bitset<6> faces = false;
 
-				if (type != block_type::AIR)
-					set_faces(x, y, z);
-
+				if (type == block_type::AIR) continue;
+				set_faces(x, y, z, faces);
 				if (faces.none()) continue;
 
 				std::vector<vertex> block_vertices = 
@@ -159,30 +185,29 @@ void chunk::load_mesh()
 	m_state = chunk_state::loaded_mesh;
 }
 
-void chunk::set_faces(int x, int y, int z)
+void chunk::set_faces(int x, int y, int z, std::bitset<6>& faces)
 {
-	std::bitset<6>* faces = &m_block_faces[get_index(x, y, z)];
+	if (m_block_types[util::get_chunk_index(x + 1, y, z)] == block_type::AIR)
+		faces.set(RIGHT_FACE_INDEX);
+	if (m_block_types[util::get_chunk_index(x - 1, y, z)] == block_type::AIR)
+		faces.set(LEFT_FACE_INDEX);
+	
+	if (y < CHUNK_HEIGHT)
+	{
+		if (m_block_types[util::get_chunk_index(x, y + 1, z)] == block_type::AIR)
+			faces.set(TOP_FACE_INDEX);
+	} else faces.set(TOP_FACE_INDEX);
 
-	if (x < CHUNK_SIZE)
-		if(m_block_types[get_index(x + 1, y, z)] != block_type::AIR)
-			m_block_faces[get_index(x, y, z)].set(4);
-	if (x > 0)
-		if (m_block_types[get_index(x - 1, y, z)] == block_type::AIR)
-			m_block_faces[get_index(x, y, z)].set(5);
-
-	if (y < CHUNK_SIZE)
-		if (m_block_types[get_index(x, y + 1, z)] == block_type::AIR)
-			m_block_faces[get_index(x, y, z)].set(0);
 	if (y > 0)
-		if (m_block_types[get_index(x, y - 1, z)] == block_type::AIR)
-			m_block_faces[get_index(x, y, z)].set(1);
+	{
+		if (m_block_types[util::get_chunk_index(x, y - 1, z)] == block_type::AIR)
+			faces.set(BOTTOM_FACE_INDEX);
+	}
 
-	if (z < CHUNK_SIZE)
-		if (m_block_types[get_index(x, y, z + 1)] == block_type::AIR)
-			m_block_faces[get_index(x, y, z)].set(2);
-	if (z > 0)
-		if (m_block_types[get_index(x, y, z - 1)] == block_type::AIR)
-			m_block_faces[get_index(x, y, z)].set(3);
+	if (m_block_types[util::get_chunk_index(x, y, z + 1)] == block_type::AIR)
+		faces.set(FRONT_FACE_INDEX);
+	if (m_block_types[util::get_chunk_index(x, y, z - 1)] == block_type::AIR)
+		faces.set(BACK_FACE_INDEX);
 
 }
 
@@ -196,9 +221,10 @@ void chunk::set_data(std::vector<float> vertices, std::vector<unsigned int> indi
 	vertex_attribute_array(0, 3, 8, 0);
 	vertex_attribute_array(1, 2, 8, 3);
 	vertex_attribute_array(2, 3, 8, 5);
+	vao.unbind();
 
 	glm::mat4 transform = 
-		glm::translate(glm::mat4(1), (glm::vec3) m_position * (float)CHUNK_SIZE);
+		glm::translate(glm::mat4(1), (glm::vec3) m_position * (float)(CHUNK_SIZE * 2));
 	m_data = new chunk_data((unsigned int)indices.size(), vao, ibo, transform);
 }
 

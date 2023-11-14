@@ -7,4 +7,4 @@
 #define NUM_LOAD_CHUNKS_PER_FRAME 1
 
 // render distance IN CHUNKS
-#define RENDER_DISTANCE 4
+#define RENDER_DISTANCE 8

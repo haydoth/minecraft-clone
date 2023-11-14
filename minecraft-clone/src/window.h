@@ -1,7 +1,7 @@
 #pragma once
 
-#include <glfw3.h>
 #include <glad.h>
+#include <glfw3.h>
 #include <string>
 #include <functional>
 #include "event/event.h"
@@ -29,6 +29,8 @@ public:
 	~window();
 
 	void update();
+	bool is_fullscreen();
+	void set_fullscreen(bool flag);
 	GLFWwindow* get_handle() { return m_window; };
 
 private:

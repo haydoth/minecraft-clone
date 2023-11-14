@@ -47,7 +47,11 @@
     <IncludePath>C:\storage\vs\minecraft-clone\minecraft-clone\vendor;C:\storage\vs\minecraft-clone\minecraft-clone\src;C:\storage\cpplibs\glfw;C:\storage\cpplibs\glad;C:\storage\cpplibs\glm;$(IncludePath)</IncludePath>
     <IntDir>$(SolutionDir)/bin-int/$(Platform)-$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)/bin/$(Platform)-$(Configuration)\</OutDir>
-    <LibraryPath>C:\storage\cpplibs\glfw;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\storage\cpplibs\glfw;C:\storage\vs\minecraft-clone\minecraft-clone\vendor\FastNoise2\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>C:\storage\vs\minecraft-clone\minecraft-clone\vendor;C:\storage\vs\minecraft-clone\minecraft-clone\src;C:\storage\cpplibs\glfw;C:\storage\cpplibs\glad;C:\storage\cpplibs\glm;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\storage\cpplibs\glfw;C:\storage\vs\minecraft-clone\minecraft-clone\vendor\FastNoise2\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -55,12 +59,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLFW_INCLUDE_NONE;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;FastNoise.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -71,12 +75,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;FastNoise.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -95,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\texture.h" />
+    <ClInclude Include="src\util.h" />
     <ClInclude Include="src\world\block.h" />
     <ClInclude Include="src\application.h" />
     <ClInclude Include="src\buffer.h" />
@@ -112,6 +119,7 @@
     <ClInclude Include="src\window.h" />
     <ClInclude Include="src\world\chunk.h" />
     <ClInclude Include="src\world\chunk_manager.h" />
+    <ClInclude Include="src\world\generator\chunk_generator.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\shaders\basic.mcshader" />

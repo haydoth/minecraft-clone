@@ -1,9 +1,12 @@
 #pragma once
-#include "block.h"
+
+#include <world/block.h>
+#include <world/generator/chunk_generator.h>
+#include <buffer.h>
 #include <constants.h>
 #include <bitset>
 #include <vector>
-#include <buffer.h>
+#include <functional>
 
 enum class chunk_state
 {
@@ -29,8 +32,9 @@ public:
 	{
 
 	}
-	void load_blocks(), load_mesh(), unload();
-	void set_faces(int x, int y, int z);
+	void load_blocks(chunk_generator gen),
+		load_mesh(), unload();
+	void set_faces(int x, int y, int z, std::bitset<6>& faces);
 	glm::ivec3 get_position() { return m_position; }
 	chunk_data& get_data() { return *m_data; }
 
@@ -45,6 +49,6 @@ private:
 	glm::ivec3 m_position;
 	chunk_data* m_data;
 
-	block_type m_block_types[CHUNK_SIZE * CHUNK_HEIGHT * CHUNK_SIZE]{};
-	std::bitset<6> m_block_faces[CHUNK_SIZE * CHUNK_HEIGHT * CHUNK_SIZE]{};
+	// generate an additional layer of blocks to have something to check edge faces against
+	block_type m_block_types[(CHUNK_SIZE + 2) * CHUNK_HEIGHT * (CHUNK_SIZE + 2)]{};
 };

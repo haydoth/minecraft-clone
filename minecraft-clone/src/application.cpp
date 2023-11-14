@@ -25,8 +25,7 @@ application::application() : m_player(20.0f, 0.25f)
 
     m_texture_atlas = std::make_unique<texture_atlas>(16);
     bool loaded_atlas = m_texture_atlas.get()->load_from_file(atlas_path);
-    assert(loaded_atlas
-        && "Failed to load texture atlas.");
+    assert(loaded_atlas && "Failed to load texture atlas.");
 }
 
 application::~application()
@@ -41,9 +40,13 @@ void application::on_event(event& e)
 
     dispatcher.dispatch<window_close_event>(BIND_FN(application::on_window_close));
 
+    dispatcher.dispatch<key_released_event>(BIND_FN(application::toggle_fullscreen));
+
     // TODO: implement a better way to sort through objects that are affected by events.
     // for example; if the player is in a menu, then we don't want the mouse move event
     // to be handled by the player rotation script, we want it to move the ingame cursor.
+
+    // maybe use a state machine for this
 
     m_player.on_event(e);
 }
@@ -54,6 +57,16 @@ bool application::on_window_close(window_close_event& e)
     return true;
 }
 
+bool application::toggle_fullscreen(key_released_event& e)
+{
+    if (e.GetKeyCode() == GLFW_KEY_ESCAPE)
+    {
+        m_window->set_fullscreen(!m_window->is_fullscreen());
+        return true;
+    }
+    return false;
+}
+
 void application::run()
 {
     std::string basic_shader_src = "src/shaders/basic.mcshader";
@@ -62,7 +75,6 @@ void application::run()
     basic_shader.set_int("Atlas", 0);
 
     chunk_manager manager;
-    manager.update({ 0,0,0 });
 
     // settings
     input::set_cursor_mode(GLFW_CURSOR_DISABLED);
@@ -81,18 +93,24 @@ void application::run()
         m_player.update_position(timestep);
         // player rotation is handled by an event
 
+        // update chunkloader
+        manager.update(m_player.get_camera().get_data().position);
+
         // wireframe mode
         if (input::is_key_pressed(GLFW_KEY_L)) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
        
         // rendering
-		glClearColor(0.3f, 0.0f, 0.0f, 1.0f);
+		glClearColor(0.0f, 0.8f, 0.9f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        for (auto& pair : manager.get_chunks())
+        for (auto& [index, chunk] : manager.get_chunks())
         {
-            chunk_data data = pair.second.get()->get_data();
-            renderer::draw_mesh({ {basic_shader, data.index_count, data.vao, data.ibo},
+            if (chunk.get()->m_state != chunk_state::loaded_mesh) continue;
+            
+            chunk_data data = chunk.get()->get_data();
+            renderer::draw_mesh({ 
+                {basic_shader, data.index_count, data.vao, data.ibo},
                 data.transform, m_player.get_camera() });
         }
 

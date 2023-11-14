@@ -8,7 +8,7 @@ class player_controller
 {
 public:
 	player_controller(float speed, float look_sensitivity) 
-		: m_speed(speed), m_look_sensitivity(look_sensitivity) {}
+		: m_speed(speed), m_look_sensitivity(look_sensitivity), m_camera(glm::vec3(0, 30, 0)) {}
 
 	camera& get_camera() { return m_camera; }
 
@@ -17,7 +17,7 @@ public:
 
 	void on_event(event& e);
 private:
-	camera m_camera = camera();
+	camera m_camera;
 	float m_speed;
 	float m_look_sensitivity;
 

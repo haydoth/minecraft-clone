@@ -120,3 +120,26 @@ void window::update()
 	glfwPollEvents();
 	glfwSwapBuffers(m_window);
 }
+
+bool window::is_fullscreen()
+{
+	return glfwGetWindowMonitor(m_window) != nullptr;
+}
+
+void window::set_fullscreen(bool flag)
+{
+	if (is_fullscreen() == flag) return;
+
+	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+	if (flag)
+	{
+		glfwSetWindowMonitor(m_window, monitor, 0, 0, mode->width, mode->height, GLFW_DONT_CARE);
+	}
+	else
+	{
+		glfwSetWindowMonitor(m_window, nullptr, mode->width / 4, mode->height / 4,
+			m_data.width, m_data.height, GLFW_DONT_CARE);
+	}
+}

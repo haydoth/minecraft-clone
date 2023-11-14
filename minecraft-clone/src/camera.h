@@ -53,6 +53,23 @@ public:
                 projection_data.near, projection_data.far);
     }
 
+    camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f))
+    {
+        m_position = position;
+        m_world_up = glm::vec3(0.0f, 1.0f, 0.0f);
+        m_yaw = YAW;
+        m_pitch = PITCH;
+        update_camera_vectors();
+
+        m_data = camera_data();
+        m_data.view_matrix = glm::mat4(1);
+        perspective_data projection_data =
+            perspective_data(75.0f, 16.0f / 9.0f, 0.1f, 3000.0f);
+        m_data.projection_matrix = glm::perspective
+        (glm::radians(projection_data.fov_y), projection_data.aspect_ratio,
+            projection_data.near, projection_data.far);
+    }
+
     camera_data get_data()
     {
         m_data.view_matrix = glm::lookAt(m_position, m_position + m_front, m_up);

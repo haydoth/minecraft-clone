@@ -1,0 +1,12 @@
+C:\storage\cpplibs\glad\glad.c;C:\storage\vs\minecraft-clone\minecraft-clone\x64\Release\glad.obj
+C:\storage\vs\minecraft-clone\minecraft-clone\src\application.cpp;C:\storage\vs\minecraft-clone\minecraft-clone\x64\Release\application.obj
+C:\storage\vs\minecraft-clone\minecraft-clone\src\input.cpp;C:\storage\vs\minecraft-clone\minecraft-clone\x64\Release\input.obj
+C:\storage\vs\minecraft-clone\minecraft-clone\src\main.cpp;C:\storage\vs\minecraft-clone\minecraft-clone\x64\Release\main.obj
+C:\storage\vs\minecraft-clone\minecraft-clone\src\player_controller.cpp;C:\storage\vs\minecraft-clone\minecraft-clone\x64\Release\player_controller.obj
+C:\storage\vs\minecraft-clone\minecraft-clone\src\renderer.cpp;C:\storage\vs\minecraft-clone\minecraft-clone\x64\Release\renderer.obj
+C:\storage\vs\minecraft-clone\minecraft-clone\src\shader.cpp;C:\storage\vs\minecraft-clone\minecraft-clone\x64\Release\shader.obj
+C:\storage\vs\minecraft-clone\minecraft-clone\src\texture.cpp;C:\storage\vs\minecraft-clone\minecraft-clone\x64\Release\texture.obj
+C:\storage\vs\minecraft-clone\minecraft-clone\src\texture_atlas.h;C:\storage\vs\minecraft-clone\minecraft-clone\x64\Release\texture_atlas.h.obj
+C:\storage\vs\minecraft-clone\minecraft-clone\src\window.cpp;C:\storage\vs\minecraft-clone\minecraft-clone\x64\Release\window.obj
+C:\storage\vs\minecraft-clone\minecraft-clone\src\world\chunk.cpp;C:\storage\vs\minecraft-clone\minecraft-clone\x64\Release\chunk.obj
+C:\storage\vs\minecraft-clone\minecraft-clone\src\world\chunk_manager.cpp;C:\storage\vs\minecraft-clone\minecraft-clone\x64\Release\chunk_manager.obj

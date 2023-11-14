@@ -1,0 +1,25 @@
+﻿  Scanning sources for module dependencies...
+  application.cpp
+  input.cpp
+  main.cpp
+  renderer.cpp
+  window.cpp
+  chunk.cpp
+C:\storage\vs\minecraft-clone\minecraft-clone\src\world\chunk.cpp(27,78): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=int
+          ]
+C:\storage\vs\minecraft-clone\minecraft-clone\src\world\chunk.cpp(27,68): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=int
+          ]
+C:\storage\vs\minecraft-clone\minecraft-clone\src\world\chunk.cpp(129,26): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\storage\vs\minecraft-clone\minecraft-clone\src\world\chunk.cpp(214,53): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+C:\storage\vs\minecraft-clone\minecraft-clone\src\world\chunk.cpp(215,50): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 1335 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  minecraft-clone.vcxproj -> C:\storage\vs\minecraft-clone\x64\Release\minecraft-clone.exe

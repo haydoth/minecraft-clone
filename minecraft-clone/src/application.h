@@ -17,6 +17,7 @@ public:
 	void on_event(event& e);
 
 	bool on_window_close(window_close_event& e);
+	bool toggle_fullscreen(key_released_event& e);
 
 	void run();
 
