@@ -8,9 +8,21 @@ class player_controller
 {
 public:
 	player_controller(float speed, float look_sensitivity) 
-		: m_speed(speed), m_look_sensitivity(look_sensitivity), m_camera(glm::vec3(0, 30, 0)) {}
+		: m_speed(speed), m_look_sensitivity(look_sensitivity), m_camera(glm::vec3(0, 0, 0)) 
+	{
+	}
 
 	camera& get_camera() { return m_camera; }
+
+	void set_position(glm::vec3 new_pos)
+	{
+		return m_camera.set_position(new_pos);
+	}
+
+	glm::vec3 get_position()
+	{
+		return m_camera.get_data().position;
+	}
 
 	void update_position(timestep ts);
 	bool update_rotation(mouse_moved_event& e);

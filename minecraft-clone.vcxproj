@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7C1E49CD-E8A9-B691-F1BA-39865DC51292}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>minecraft-clone</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>bin\Debug\</OutDir>
+    <IntDir>obj\Debug\</IntDir>
+    <TargetName>minecraft-clone</TargetName>
+    <TargetExt>.exe</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>bin\Release\</OutDir>
+    <IntDir>obj\Release\</IntDir>
+    <TargetName>minecraft-clone</TargetName>
+    <TargetExt>.exe</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>minecraft-clone\src;minecraft-clone\vendor\Glad\include;minecraft-clone\vendor\glfw\include;minecraft-clone\vendor\glm;minecraft-clone\vendor\stb_image\include;minecraft-clone\vendor\FastNoise2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST minecraft-clone\vendor\FastNoise2\bin\ (xcopy /Q /E /Y /I minecraft-clone\vendor\FastNoise2\bin minecraft-clone\bin\windows-x86_64\Debug\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I minecraft-clone\vendor\FastNoise2\bin minecraft-clone\bin\windows-x86_64\Debug\Sandbox &gt; nul)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>minecraft-clone\src;minecraft-clone\vendor\Glad\include;minecraft-clone\vendor\glfw\include;minecraft-clone\vendor\glm;minecraft-clone\vendor\stb_image\include;minecraft-clone\vendor\FastNoise2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST minecraft-clone\vendor\FastNoise2\bin\ (xcopy /Q /E /Y /I minecraft-clone\vendor\FastNoise2\bin minecraft-clone\bin\windows-x86_64\Release\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I minecraft-clone\vendor\FastNoise2\bin minecraft-clone\bin\windows-x86_64\Release\Sandbox &gt; nul)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="minecraft-clone\src\application.h" />
+    <ClInclude Include="minecraft-clone\src\buffer.h" />
+    <ClInclude Include="minecraft-clone\src\camera.h" />
+    <ClInclude Include="minecraft-clone\src\constants.h" />
+    <ClInclude Include="minecraft-clone\src\core.h" />
+    <ClInclude Include="minecraft-clone\src\event\event.h" />
+    <ClInclude Include="minecraft-clone\src\event\events.h" />
+    <ClInclude Include="minecraft-clone\src\input.h" />
+    <ClInclude Include="minecraft-clone\src\player_controller.h" />
+    <ClInclude Include="minecraft-clone\src\renderer.h" />
+    <ClInclude Include="minecraft-clone\src\shader.h" />
+    <ClInclude Include="minecraft-clone\src\texture.h" />
+    <ClInclude Include="minecraft-clone\src\texture_atlas.h" />
+    <ClInclude Include="minecraft-clone\src\timestep.h" />
+    <ClInclude Include="minecraft-clone\src\util.h" />
+    <ClInclude Include="minecraft-clone\src\vertex.h" />
+    <ClInclude Include="minecraft-clone\src\window.h" />
+    <ClInclude Include="minecraft-clone\src\world\block.h" />
+    <ClInclude Include="minecraft-clone\src\world\chunk.h" />
+    <ClInclude Include="minecraft-clone\src\world\chunk_manager.h" />
+    <ClInclude Include="minecraft-clone\src\world\generator\chunk_generator.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="minecraft-clone\src\application.cpp" />
+    <ClCompile Include="minecraft-clone\src\input.cpp" />
+    <ClCompile Include="minecraft-clone\src\main.cpp" />
+    <ClCompile Include="minecraft-clone\src\player_controller.cpp" />
+    <ClCompile Include="minecraft-clone\src\renderer.cpp" />
+    <ClCompile Include="minecraft-clone\src\shader.cpp" />
+    <ClCompile Include="minecraft-clone\src\texture.cpp" />
+    <ClCompile Include="minecraft-clone\src\window.cpp" />
+    <ClCompile Include="minecraft-clone\src\world\chunk.cpp" />
+    <ClCompile Include="minecraft-clone\src\world\chunk_manager.cpp" />
+    <ClCompile Include="minecraft-clone\vendor\glad\src\glad.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="minecraft-clone\vendor\glfw\GLFW.vcxproj">
+      <Project>{154B857C-0182-860D-AA6E-6C109684020F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="minecraft-clone\vendor\Glad\Glad.vcxproj">
+      <Project>{BDD6857C-A90D-870D-52FA-6C103E10030F}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

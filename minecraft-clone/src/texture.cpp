@@ -1,10 +1,10 @@
 #include "texture.h"
 
-#include <glad.h>
+#include <glad/glad.h>
 #include <iostream>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include <stb_image/stb_image.h>
+#include <stb_image.h>
 
 bool texture::load_from_file(std::string path)
 {

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\event">
+      <UniqueIdentifier>{5E2A22B5-CA94-D62B-13D3-87D17F7CB480}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\world">
+      <UniqueIdentifier>{C44364B6-30AE-182D-79EC-C9D2E595F681}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\world\generator">
+      <UniqueIdentifier>{DA1A2F3B-467C-0C49-CFE9-52FB3B4A4308}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor">
+      <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\glad">
+      <UniqueIdentifier>{9A8E79C1-0644-F2B6-8F38-EC8DFBECE8BA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\glad\src">
+      <UniqueIdentifier>{B1098FEA-1D95-FCAE-26A6-7FA392B058AF}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="minecraft-clone\src\application.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="minecraft-clone\src\buffer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="minecraft-clone\src\camera.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="minecraft-clone\src\constants.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="minecraft-clone\src\core.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="minecraft-clone\src\event\event.h">
+      <Filter>src\event</Filter>
+    </ClInclude>
+    <ClInclude Include="minecraft-clone\src\event\events.h">
+      <Filter>src\event</Filter>
+    </ClInclude>
+    <ClInclude Include="minecraft-clone\src\input.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="minecraft-clone\src\player_controller.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="minecraft-clone\src\renderer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="minecraft-clone\src\shader.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="minecraft-clone\src\texture.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="minecraft-clone\src\texture_atlas.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="minecraft-clone\src\timestep.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="minecraft-clone\src\util.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="minecraft-clone\src\vertex.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="minecraft-clone\src\window.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="minecraft-clone\src\world\block.h">
+      <Filter>src\world</Filter>
+    </ClInclude>
+    <ClInclude Include="minecraft-clone\src\world\chunk.h">
+      <Filter>src\world</Filter>
+    </ClInclude>
+    <ClInclude Include="minecraft-clone\src\world\chunk_manager.h">
+      <Filter>src\world</Filter>
+    </ClInclude>
+    <ClInclude Include="minecraft-clone\src\world\generator\chunk_generator.h">
+      <Filter>src\world\generator</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="minecraft-clone\src\application.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="minecraft-clone\src\input.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="minecraft-clone\src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="minecraft-clone\src\player_controller.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="minecraft-clone\src\renderer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="minecraft-clone\src\shader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="minecraft-clone\src\texture.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="minecraft-clone\src\window.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="minecraft-clone\src\world\chunk.cpp">
+      <Filter>src\world</Filter>
+    </ClCompile>
+    <ClCompile Include="minecraft-clone\src\world\chunk_manager.cpp">
+      <Filter>src\world</Filter>
+    </ClCompile>
+    <ClCompile Include="minecraft-clone\vendor\glad\src\glad.c">
+      <Filter>vendor\glad\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

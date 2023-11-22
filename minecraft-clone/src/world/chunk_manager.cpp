@@ -75,7 +75,7 @@ void chunk_manager::unload_chunks(glm::vec3 camera_position)
 			index.x > max.x || index.y > max.y
 			)
 		{
-			// erase this index from all chunk lists
+			// erase this index from chunk lists
 			m_loaded_chunks.erase(m_loaded_chunks.begin() + i);
 			m_chunks.erase(index);
 		}

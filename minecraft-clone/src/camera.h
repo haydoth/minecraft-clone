@@ -1,8 +1,8 @@
 #pragma once
 
-#include <ext.hpp>
+#include <glm/ext.hpp>
 #include <iostream>
-#include <core.h>
+#include "core.h"
 
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
@@ -75,6 +75,11 @@ public:
         m_data.view_matrix = glm::lookAt(m_position, m_position + m_front, m_up);
         m_data.position = m_position;
         return m_data;
+    }
+
+    void set_position(glm::vec3 new_position)
+    {
+        m_position = new_position;
     }
 
     void move(glm::vec3 input, float speed, float deltaTime)

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <world/block.h>
-#include <FastNoise2/include/FastNoise/FastNoise.h>
+#include <FastNoise/FastNoise.h>
 #include <util.h>
 #include <core.h>
 
@@ -11,31 +11,28 @@ public:
 
 	void init()
 	{
+		// this noise library is probably temporary,
+		// a custom implementation would be ideal.
 		auto fn_perlin = FastNoise::New<FastNoise::Perlin>();
 		auto fn_fractal = FastNoise::New<FastNoise::FractalFBm>();
 		fn_fractal->SetSource(fn_perlin);
 		m_gen = fn_fractal;
 	}
-	block_type generate(glm::ivec3 position)
+	int get_surface_level(glm::ivec2 position)
 	{
-		int x = position.x, y = position.y, z = position.z;
-
-		//int y_level = (m_noise_output[util::get_chunk_column_index(x, z)] * 0.5 + 0.5f)
-		//	* CHUNK_HEIGHT * m_amplitude;
-		
 		int y_level = (m_gen->GenSingle2D(
 			position.x * m_frequency, 
-			position.z * m_frequency, 2007) * 0.5f + 0.5f) * CHUNK_HEIGHT * m_amplitude;
+			position.y * m_frequency, 2007) * 0.5f + 0.5f) * CHUNK_HEIGHT * m_amplitude;
 
-		if (y == y_level)
-		{
-			return block_type::GRASS;
-		}
-		else if (y < y_level)
-		{
-			return block_type::DIRT;
-		}
-		else return block_type::AIR;
+		return y_level;
+	}
+	block_type get_block_at(int y, int surface)
+	{
+		block_type type = block_type::AIR;
+		if (y < surface) type = block_type::DIRT;
+		if (y == surface) if (rand() % 2)type = block_type::GRASS; else type = block_type::STONE;
+
+		return type;
 	}
 
 private:

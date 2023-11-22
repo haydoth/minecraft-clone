@@ -1,6 +1,6 @@
 #include "application.h"
 
-int main() {
+int WinMain() {
 	application* app = new application();
 	app->run();
 	return 0;

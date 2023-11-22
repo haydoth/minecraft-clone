@@ -1,8 +1,8 @@
 #include "player_controller.h"
 
-#include <glm.hpp>
+#include <glm/glm.hpp>
 
-#include <glfw3.h>
+#include <glfw/glfw3.h>
 #include <input.h>
 
 void player_controller::update_position(timestep ts)
@@ -19,6 +19,7 @@ void player_controller::update_position(timestep ts)
 
 	if(input != glm::vec3(0, 0, 0))
 		m_camera.move(glm::normalize(input), m_speed, ts.get_seconds());
+
 }
 bool player_controller::update_rotation(mouse_moved_event& e)
 {

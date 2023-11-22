@@ -1,7 +1,7 @@
 #pragma once
 
-#include <glad.h>
-#include <ext.hpp>
+#include "glad/glad.h"
+#include "glm/ext.hpp"
 
 #include <string>
 #include <type_traits>

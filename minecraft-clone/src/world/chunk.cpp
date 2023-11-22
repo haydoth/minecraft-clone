@@ -16,9 +16,6 @@ std::vector<vertex> generate_block_vertices
 
 	std::vector<vertex> vertices;
 
-
-
-
 	// optimization:
 	// instead of generating vertices on the fly, this could probably
 	// be precomputed easily
@@ -104,17 +101,17 @@ void chunk::load_blocks(chunk_generator gen)
 
 	for(int x = 0; x < CHUNK_SIZE + 2; x++)
 	{
-		for (int y = 0; y < CHUNK_HEIGHT; y++)
+		for (int z = 0; z < CHUNK_SIZE + 2; z++)
 		{
-			for (int z = 0; z < CHUNK_SIZE + 2; z++)
-			{
-				glm::ivec3 world_pos = glm::ivec3(
-					x + (m_position.x * CHUNK_SIZE),
-					y,
-					z + (m_position.z * CHUNK_SIZE));
+			glm::ivec2 world_column = glm::ivec2(
+				x + (m_position.x * CHUNK_SIZE),
+				z + (m_position.z * CHUNK_SIZE));
+			int y_level = gen.get_surface_level(world_column);
 
-				m_block_types[util::get_chunk_index(x, y, z)] = 
-					gen.generate(world_pos);
+			for (int y = 0; y < CHUNK_HEIGHT; y++)
+			{
+				m_block_types[util::get_chunk_index(x, y, z)] =
+					gen.get_block_at(y, y_level);
 			}
 		}
 	}
@@ -134,19 +131,22 @@ void chunk::load_mesh()
 		{
 			for (int z = 1; z < CHUNK_SIZE + 1; z++)
 			{
+				// get block type
 				int block_index = util::get_chunk_index(x, y, z);
 				block_type& type = m_block_types[block_index];
 				std::bitset<6> faces = false;
 
+				// ignore any blocks that don't have geometry
 				if (type == block_type::AIR) continue;
 				set_faces(x, y, z, faces);
 				if (faces.none()) continue;
 
+				// generate vertices
 				std::vector<vertex> block_vertices = 
 					generate_block_vertices(type, faces, {x * 2, y * 2, z * 2});
-
 				vertices.insert(vertices.end(), block_vertices.begin(), block_vertices.end());
 
+				// generate indices
 				std::vector<int> block_indices;
 				int block_face_count = faces.count();
 
@@ -179,35 +179,41 @@ void chunk::load_mesh()
 		f_vertices.push_back(v.normal.y);
 		f_vertices.push_back(v.normal.z);
 	}
-
 	set_data(f_vertices, indices);
 
 	m_state = chunk_state::loaded_mesh;
 }
 
+void chunk::set_face(int x, int y, int z, int face, std::bitset<6>& faces)
+{
+	faces.set(face);
+	m_visible_blocks.push_back({ x, y, z });
+}
+
 void chunk::set_faces(int x, int y, int z, std::bitset<6>& faces)
 {
+	// TODO: change these to the new method
 	if (m_block_types[util::get_chunk_index(x + 1, y, z)] == block_type::AIR)
-		faces.set(RIGHT_FACE_INDEX);
+		set_face(x, y, z, RIGHT_FACE_INDEX, faces);
 	if (m_block_types[util::get_chunk_index(x - 1, y, z)] == block_type::AIR)
-		faces.set(LEFT_FACE_INDEX);
+		set_face(x, y, z, LEFT_FACE_INDEX, faces);
 	
-	if (y < CHUNK_HEIGHT)
+	if (y < CHUNK_HEIGHT - 1)
 	{
 		if (m_block_types[util::get_chunk_index(x, y + 1, z)] == block_type::AIR)
-			faces.set(TOP_FACE_INDEX);
-	} else faces.set(TOP_FACE_INDEX);
+			set_face(x, y, z, TOP_FACE_INDEX, faces);
+	} else set_face(x, y, z, TOP_FACE_INDEX, faces);
 
 	if (y > 0)
 	{
 		if (m_block_types[util::get_chunk_index(x, y - 1, z)] == block_type::AIR)
-			faces.set(BOTTOM_FACE_INDEX);
+			set_face(x, y, z, BOTTOM_FACE_INDEX, faces);
 	}
 
 	if (m_block_types[util::get_chunk_index(x, y, z + 1)] == block_type::AIR)
-		faces.set(FRONT_FACE_INDEX);
+		set_face(x, y, z, FRONT_FACE_INDEX, faces);
 	if (m_block_types[util::get_chunk_index(x, y, z - 1)] == block_type::AIR)
-		faces.set(BACK_FACE_INDEX);
+		set_face(x, y, z, BACK_FACE_INDEX, faces);
 
 }
 

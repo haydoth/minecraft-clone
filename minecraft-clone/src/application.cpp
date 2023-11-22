@@ -21,7 +21,7 @@ application::application() : m_player(20.0f, 0.25f)
 	m_window = std::make_unique<window>(window::window_data("mc clone", 1280, 720));
     m_window->set_event_callback(BIND_FN(application::on_event));
 
-    std::string atlas_path = "src/textures/atlas.png";
+    std::string atlas_path = "assets/textures/atlas.png";
 
     m_texture_atlas = std::make_unique<texture_atlas>(16);
     bool loaded_atlas = m_texture_atlas.get()->load_from_file(atlas_path);
@@ -69,12 +69,14 @@ bool application::toggle_fullscreen(key_released_event& e)
 
 void application::run()
 {
-    std::string basic_shader_src = "src/shaders/basic.mcshader";
+    std::string basic_shader_src = "assets/shaders/basic.mcshader";
     shader basic_shader(shader::parse_shader_source(basic_shader_src));
 
     basic_shader.set_int("Atlas", 0);
 
     chunk_manager manager;
+
+    m_player.set_position({ 0, 50, 0 });
 
     // settings
     input::set_cursor_mode(GLFW_CURSOR_DISABLED);
@@ -94,7 +96,7 @@ void application::run()
         // player rotation is handled by an event
 
         // update chunkloader
-        manager.update(m_player.get_camera().get_data().position);
+        manager.update(m_player.get_position());
 
         // wireframe mode
         if (input::is_key_pressed(GLFW_KEY_L)) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

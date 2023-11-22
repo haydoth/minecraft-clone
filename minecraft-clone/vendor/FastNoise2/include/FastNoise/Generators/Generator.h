@@ -3,7 +3,7 @@
 #include <cmath>
 #include <algorithm>
 
-#include <FastNoise2/include/FastNoise/FastNoise_Config.h>
+#include <FastNoise/FastNoise_Config.h>
 
 #if !defined( FASTNOISE_METADATA ) && defined( __INTELLISENSE__ )
 //#define FASTNOISE_METADATA

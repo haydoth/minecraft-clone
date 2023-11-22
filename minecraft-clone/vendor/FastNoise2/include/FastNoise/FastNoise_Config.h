@@ -1,5 +1,5 @@
 #pragma once
-#include <FastNoise2/include/FastSIMD/FastSIMD.h>
+#include <FastSIMD/FastSIMD.h>
 #include "FastNoise_Export.h"
 
 #define FASTNOISE_CALC_MIN_MAX true

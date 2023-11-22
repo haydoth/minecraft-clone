@@ -1,7 +1,7 @@
 #pragma once
-#include <shader.h>
-#include <camera.h>
-#include <buffer.h>
+#include "shader.h"
+#include "camera.h"
+#include "buffer.h"
 
 struct mesh_render_data
 {
